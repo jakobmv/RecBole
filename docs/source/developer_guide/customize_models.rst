@@ -61,6 +61,7 @@ Here, we suppose the NewModel encode the users and items, where we use :func:`~r
         # load dataset info
         self.n_users = dataset.user_num
         self.n_items = dataset.item_num
+        self.mask_token = self.n_items
 
         # load parameters info
         self.embedding_size = config['embedding_size']
@@ -164,6 +165,7 @@ Thus the final implemented NewModel is:
             # load dataset info
             self.n_users = dataset.user_num
             self.n_items = dataset.item_num
+            self.mask_token = self.n_items
 
             # load parameters info
             self.embedding_size = config['embedding_size']

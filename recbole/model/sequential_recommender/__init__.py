@@ -29,3 +29,39 @@ from recbole.model.sequential_recommender.srgnn import SRGNN
 from recbole.model.sequential_recommender.stamp import STAMP
 from recbole.model.sequential_recommender.transrec import TransRec
 from recbole.model.sequential_recommender.fearec import FEARec
+from recbole.model.sequential_recommender.dessbert4rec import DESSBERT4Rec
+
+__all__ = [
+    "BERT4Rec",
+    "Caser",
+    "CORE",
+    "DIEN",
+    "DIN",
+    "FDSA",
+    "FOSSIL",
+    "FPMC",
+    "GCSAN",
+    "GRU4Rec",
+    "GRU4RecCPR",
+    "GRU4RecF",
+    "GRU4RecKG",
+    "HGN",
+    "HRM",
+    "KSR",
+    "LightSANs",
+    "NARM",
+    "NextItNet",
+    "NPE",
+    "RepeatNet",
+    "S3Rec",
+    "SASRec",
+    "SASRecCPR",
+    "SASRecF",
+    "SHAN",
+    "SINE",
+    "SRGNN",
+    "STAMP",
+    "TransRec",
+    "FEARec",
+    "DESSBERT4Rec",
+]

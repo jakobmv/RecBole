@@ -162,13 +162,16 @@ class BERT4Rec(SequentialRecommender):
         multi_hot[torch.arange(masked_index.size(0)), masked_index] = 1
         return multi_hot
 
-    def calculate_loss(self, interaction):
-        masked_item_seq = interaction[self.MASK_ITEM_SEQ]
-        pos_items = interaction[self.POS_ITEMS]
-        neg_items = interaction[self.NEG_ITEMS]
-        masked_index = interaction[self.MASK_INDEX]
+    def calculate_loss(self, interaction):  # interaction is IDs of items user interacted with
+        masked_item_seq = interaction[self.MASK_ITEM_SEQ]   # x0, mask+x1_positional_emb, x2, mask+x3_positional_emb, x4, x5
+        pos_items = interaction[self.POS_ITEMS] # x1 (before mask)
+        neg_items = interaction[self.NEG_ITEMS] # Negatives, user did not interact with
+        masked_index = interaction[self.MASK_INDEX] # [1,3]
 
         seq_output = self.forward(masked_item_seq)
+        
+        
+        # We only calculate loss for masked position:
         pred_index_map = self.multi_hot_embed(
             masked_index, masked_item_seq.size(-1)
         )  # [B*mask_len max_len]
@@ -200,6 +203,7 @@ class BERT4Rec(SequentialRecommender):
         elif self.loss_type == "CE":
             loss_fct = nn.CrossEntropyLoss(reduction="none")
             test_item_emb = self.item_embedding.weight[: self.n_items]  # [item_num H]
+            
             logits = (
                 torch.matmul(seq_output, test_item_emb.transpose(0, 1))
                 + self.output_bias

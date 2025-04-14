@@ -64,6 +64,10 @@ if __name__ == "__main__":
         "topk": [20],
         "metrics": ["Recall", "MRR"],
         "valid_metric": "MRR@20",
+        "epochs": 2,
+        "train_neg_sample_args": None,
+        "loss_type": "CE",
+        "enable_distributed": False,
     }
 
     config = Config(
