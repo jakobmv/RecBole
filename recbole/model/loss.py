@@ -146,17 +146,20 @@ class DESSLoss(_Loss):
         self,
         beta: float = 1.0,
         alpha: float = 0.5,
+        mu_loss = nn.MSELoss,
         size_average=None,
         reduce=None,
         reduction: str = "mean",
+        
     ) -> None:
         super().__init__(size_average, reduce, reduction)
         self.beta = beta
         self.alpha = alpha
+        self.mu_loss = mu_loss(reduction=reduction)
 
     def forward(self, pred: torch.Tensor, y: torch.Tensor):
         return F_dess_loss(
-            pred, y, beta=self.beta, alpha=self.alpha, reduction=self.reduction
+            pred, y, beta=self.beta, alpha=self.alpha, reduction=self.reduction, mu_loss=self.mu_loss
         )
 
 
@@ -183,12 +186,9 @@ def F_dess_loss(
     # Keep the single target and multi target criterions in F_dess_loss to seamlessly
     # accomodate a training scenario with alernating single and multi target samples.
     def single_target_criterion(
-        mu_pred: torch.Tensor, sigma_pred: torch.Tensor, target: torch.Tensor, moo_loss = mu_loss
+        mu_pred: torch.Tensor, sigma_pred: torch.Tensor, target: torch.Tensor, moo_loss = None
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        
-        #d_i = target - mu_pred
         d_i = moo_loss(target, mu_pred)
-
         mu_loss = (d_i) ** 2
         sigma_loss = torch.abs(d_i) - beta * sigma_pred
         return mu_loss, sigma_loss
@@ -217,7 +217,7 @@ def F_dess_loss(
     if len(target.shape) == 3:
         mu_loss, sigma_loss = multi_target_criterion(mu_pred, sigma_pred, target)
     else:
-        mu_loss, sigma_loss = single_target_criterion(mu_pred, sigma_pred, target)
+        mu_loss, sigma_loss = single_target_criterion(mu_pred, sigma_pred, target, mu_loss)
 
     # HERE LOGG mu_loss and sigma_loss in tensorboard
     sigma_loss = torch.abs(sigma_loss)

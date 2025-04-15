@@ -254,11 +254,6 @@ class DESSBERT4Rec(SequentialRecommender):
             mu_loss = torch.sum(mu_loss) / len(targets)
             sigma_loss = torch.sum(sigma_loss) / len(targets)
 
-            # Log the losses to tensorboard
-            self.writer.add_scalar('Loss/combined', combined_loss, self.global_step)
-            self.writer.add_scalar('Loss/mu', mu_loss, self.global_step)
-            self.writer.add_scalar('Loss/sigma', sigma_loss, self.global_step)
-
             return combined_loss, mu_loss, sigma_loss
         
         # TODO Run the model and see training loss etc. 
