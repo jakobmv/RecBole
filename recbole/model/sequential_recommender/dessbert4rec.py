@@ -288,7 +288,7 @@ class DESSBERT4Rec(SequentialRecommender):
             ) + self.output_bias[test_item]  # [B]
 
         return scores
-
+        
     def full_sort_predict(self, interaction):
         item_seq = interaction[self.ITEM_SEQ]
         item_seq_len = interaction[self.ITEM_SEQ_LEN]

@@ -112,8 +112,6 @@ class EmbMarginLoss(nn.Module):
 # it reaches F_dess_loss, where it splits the tensor into mu and sigma.
 
 # Standard PyTorch Loss class, wich all losses inherit from.
-
-
 class _Loss(nn.Module):
     reduction: str  # Choose to return loss as "mean", "sum" or "none". none means element-wise loss.
 
@@ -209,17 +207,11 @@ def F_dess_loss(
 
     mu_pred, sigma_pred = get_mu_sigma(pred)
 
-    # This doesn't work, because we send in a batch at a time
-
-    #print shape of target
-    # print(f"Target shape: {target.shape}")
-
     if len(target.shape) == 3:
         mu_loss, sigma_loss = multi_target_criterion(mu_pred, sigma_pred, target)
     else:
         mu_loss, sigma_loss = single_target_criterion(mu_pred, sigma_pred, target, mu_loss)
 
-    # HERE LOGG mu_loss and sigma_loss in tensorboard
     sigma_loss = torch.abs(sigma_loss)
 
     combined_loss = torch.cat((mu_loss, sigma_loss), dim=-1)

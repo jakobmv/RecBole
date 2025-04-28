@@ -1,0 +1,16 @@
+{
+    "name": "TMU Devcontainer",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "tmu-development",
+    "workspaceFolder": "/app",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python"
+            ]
+        }
+    },
+    "forwardPorts": [],
+    "postCreateCommand": "echo 'Devcontainer is ready'",
+    "remoteUser": "root"
+}
